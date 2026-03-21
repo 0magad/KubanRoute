@@ -4,10 +4,12 @@ import GoogleProvider from "next-auth/providers/google"
 import { createUserProfileIfNotExists } from "@/lib/user"
  
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  debug: true,
+  trustHost: true,
   providers: [
     YandexProvider({
-      clientId: process.env.YANDEX_CLIENT_ID || "",
-      clientSecret: process.env.YANDEX_CLIENT_SECRET || "",
+      clientId: (process.env.YANDEX_CLIENT_ID || "").trim(),
+      clientSecret: (process.env.YANDEX_CLIENT_SECRET || "").trim(),
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",

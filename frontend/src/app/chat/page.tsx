@@ -23,7 +23,7 @@ export default function ChatPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/chat", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: input }),
@@ -40,18 +40,18 @@ export default function ChatPage() {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        
+
         const chunk = decoder.decode(value);
         const lines = chunk.split("\n\n");
         for (const line of lines) {
           if (line.startsWith("data: ")) {
             try {
-               const data = JSON.parse(line.slice(6));
-               if (data.token) {
-                 botResponse += data.token;
-                 setMessages([...newMsgs, { role: "assistant", content: botResponse }]);
-               }
-            } catch (err) {}
+              const data = JSON.parse(line.slice(6));
+              if (data.token) {
+                botResponse += data.token;
+                setMessages([...newMsgs, { role: "assistant", content: botResponse }]);
+              }
+            } catch (err) { }
           }
         }
       }
@@ -66,7 +66,7 @@ export default function ChatPage() {
   return (
     <div className="min-h-screen bg-cream-100 pt-20 pb-10 flex justify-center px-4">
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl flex flex-col overflow-hidden border border-gray-100">
-        
+
         {/* Header */}
         <div className="bg-forest-800 p-4 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-terracotta-500 flex items-center justify-center text-white font-bold shadow-md">
@@ -113,9 +113,9 @@ export default function ChatPage() {
             </button>
           </form>
           <p className="text-center text-xs text-gray-400 mt-3 flex justify-center gap-4">
-            <span className="cursor-pointer hover:text-terracotta-500 transition" onClick={()=>setInput("Едем с детьми на выходные, бюджет 10к")}>🧒 С детьми</span>
-            <span className="cursor-pointer hover:text-terracotta-500 transition" onClick={()=>setInput("Хочу на винодельню недалеко от Новороссийска")}>🍷 Винодельни</span>
-            <span className="cursor-pointer hover:text-terracotta-500 transition" onClick={()=>setInput("Тихий отдых на природе без людей")}>🏕️ Природа</span>
+            <span className="cursor-pointer hover:text-terracotta-500 transition" onClick={() => setInput("Едем с детьми на выходные, бюджет 10к")}>🧒 С детьми</span>
+            <span className="cursor-pointer hover:text-terracotta-500 transition" onClick={() => setInput("Хочу на винодельню недалеко от Новороссийска")}>🍷 Винодельни</span>
+            <span className="cursor-pointer hover:text-terracotta-500 transition" onClick={() => setInput("Тихий отдых на природе без людей")}>🏕️ Природа</span>
           </p>
         </div>
       </div>

@@ -1,5 +1,5 @@
 // API Base URL
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://kubanroute.onrender.com';
 
 // Survey options
 export const SURVEY_STEPS = [
