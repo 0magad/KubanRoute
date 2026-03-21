@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 from datetime import date
-from services.db import supabase
-from services.llm_service import analyze_sentiment
+from core.services.db import supabase
+from core.services.llm_service import analyze_sentiment
 
 router = APIRouter()
 

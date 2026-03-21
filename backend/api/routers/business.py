@@ -3,8 +3,8 @@ POST /api/business/submit — Submit a business place.
 """
 
 from fastapi import APIRouter, HTTPException
-from models.schemas import BusinessSubmission
-from services.business_service import save_submission
+from core.models.schemas import BusinessSubmission
+from core.services.business_service import save_submission
 
 router = APIRouter()
 

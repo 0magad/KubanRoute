@@ -3,7 +3,7 @@ import asyncio
 import httpx
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
-from schemas.chat_message import ChatMessage
+from core.models.schemas import ChatMessage, CurrentUser
 from config import OLLAMA_BASE_URL, OLLAMA_MODEL, SYSTEM_PROMPT
 from core.services.db import supabase
 from core.auth import get_current_user

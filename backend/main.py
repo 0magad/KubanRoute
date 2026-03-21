@@ -8,7 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from config import HOST, PORT
 
-from routers import generate, places, routes, business, weather, events, reviews, chat, recommendations, pdf_export
+from api.routers import generate, places, routes, business, weather, events, reviews, chat, recommendations, pdf_export
 
 # Setup logging
 logging.basicConfig(
@@ -52,7 +52,7 @@ app.include_router(pdf_export.router, tags=["PDF Export"])
 @app.on_event("startup")
 async def startup_event():
     """Pre-load Ollama model into memory on startup."""
-    from services.llm_service import _ensure_model_loaded
+    from core.services.llm_service import _ensure_model_loaded
     logger.info("🚀 Starting KubanRoute API...")
     logger.info("⏳ Pre-loading LLM model (this may take 15-30 seconds)...")
     success = await _ensure_model_loaded()
@@ -76,7 +76,7 @@ def root():
 @app.get("/api/health")
 def health():
     """Health check for monitoring."""
-    from services.places_service import get_places_count
+    from core.services.places_service import get_places_count
     return {
         "status": "ok",
         "places_count": get_places_count(),

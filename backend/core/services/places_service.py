@@ -5,9 +5,9 @@ PlacesService: loads and queries places from seed_places.json
 import json
 import os
 from typing import Optional
-from models.schemas import Place
+from core.models.schemas import Place
 
-from services.db import supabase
+from core.services.db import supabase
 
 def _load_places():
     if not supabase:

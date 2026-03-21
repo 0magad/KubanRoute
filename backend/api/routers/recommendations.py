@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Query
-from services.recommendation_service import get_top_recommendations
+from core.services.recommendation_service import get_top_recommendations
 
 router = APIRouter()
 

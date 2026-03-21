@@ -5,7 +5,7 @@ GET /api/places/{id} — Place details.
 
 from fastapi import APIRouter, HTTPException, Query
 from typing import Optional
-from services.places_service import get_all_places, get_place_by_id
+from core.services.places_service import get_all_places, get_place_by_id
 
 router = APIRouter()
 

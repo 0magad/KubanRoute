@@ -1,20 +1,20 @@
 import json
 from datetime import datetime
-from services.db import supabase
-from services.weather import get_weather
-from services.places_service import get_all_places
+from core.services.db import supabase
+from core.services.weather_service import get_weather
+from core.services.places_service import get_all_places
 from config import OPENAI_API_KEY
 import httpx
 
 def weather_score(place: dict, weather: dict, profile: dict) -> float:
-    temp        = weather.get('temp', 20)
-    feels_like  = weather.get('feels_like', 20)
-    is_raining  = weather.get('is_raining', False)
-    is_snowing  = weather.get('is_snowing', False)
-    is_outdoor  = place.get('outdoor', True)
+    temp = weather.get('temp', 20)
+    feels_like = weather.get('feels_like', 20)
+    is_raining = weather.get('is_raining', False)
+    is_snowing = weather.get('is_snowing', False)
+    is_outdoor = place.get('outdoor', True)
     w_sensitive = place.get('weather_sensitive', True)
-    month       = weather.get('month', datetime.now().month)
-    user_pref   = profile.get('weather_preference', 'any')
+    month = weather.get('month', datetime.now().month)
+    user_pref = profile.get('weather_preference', 'any')
     min_comfort = profile.get('min_temp_comfort', 10)
  
     if user_pref == 'indoor_only':

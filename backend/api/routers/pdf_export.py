@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import PlainTextResponse
-from services.route_generator import get_route_by_token
+from core.services.route_generator import get_route_by_token
 
 router = APIRouter()
 

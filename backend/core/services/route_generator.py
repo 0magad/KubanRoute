@@ -5,13 +5,13 @@ import logging
 import random
 from datetime import datetime
 from typing import Optional
-from models.schemas import (
+from core.models.schemas import (
     UserProfile, Place, RoutePlace, RouteDay, RouteMeta,
     RouteLogistics, GeneratedRoute,
 )
-from services.llm_service import generate_narrative
-from services.recommendation_service import get_top_recommendations
-from services.db import supabase
+from core.services.llm_service import generate_narrative
+from core.services.recommendation_service import get_top_recommendations
+from core.services.db import supabase
 
 logger = logging.getLogger(__name__)
 

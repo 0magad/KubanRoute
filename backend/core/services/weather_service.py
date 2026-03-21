@@ -1,7 +1,7 @@
 import os
 import httpx
 from datetime import datetime
-from services.db import supabase
+from core.services.db import supabase
 
 REGIONS = {
     "Краснодар":    (45.0355, 38.9753),

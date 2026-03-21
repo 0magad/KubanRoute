@@ -3,8 +3,8 @@ POST /api/generate — Generate a personalized route.
 """
 
 from fastapi import APIRouter, HTTPException
-from models.schemas import UserProfile
-from services.route_generator import generate_route
+from core.models.schemas import UserProfile
+from core.services.route_generator import generate_route
 
 router = APIRouter()
 
