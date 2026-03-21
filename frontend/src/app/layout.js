@@ -1,4 +1,5 @@
 import './globals.css';
+import { Providers } from '@/components/Providers';
 
 export const metadata = {
   title: 'KubanRoute — Персонализированные маршруты по Краснодарскому краю',
@@ -21,7 +22,7 @@ export default function RootLayout({ children }) {
         <script src={`https://api-maps.yandex.ru/2.1/?apikey=${process.env.NEXT_PUBLIC_MAP_API_KEY || ''}&lang=ru_RU`} type="text/javascript"></script>
       </head>
       <body className="min-h-screen bg-cream-100 font-body antialiased">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

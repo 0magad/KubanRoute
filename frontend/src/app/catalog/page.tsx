@@ -20,7 +20,7 @@ export default function CatalogPage() {
       }
     }
 
-    fetch("http://127.0.0.1:8000/api/places")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/places`)
       .then(res => res.json())
       .then(data => {
         setPlaces(data);
@@ -35,24 +35,24 @@ export default function CatalogPage() {
   return (
     <div className="min-h-screen bg-cream-100 flex flex-col">
       <Header />
-      
+
       {showSwipe && <SwipeTest onClose={() => setShowSwipe(false)} />}
 
       <div className="flex-1 w-full max-w-7xl mx-auto px-4 pt-24 pb-16">
         <div className="mb-10 text-center sm:text-left">
-           <h1 className="text-4xl font-display font-bold text-forest-800">Каталог мест</h1>
-           <p className="mt-3 text-lg text-forest-700/70 max-w-2xl">
-             Откройте для себя уникальные локации Краснодарского края. Просматривайте, лайкайте и планируйте!
-           </p>
+          <h1 className="text-4xl font-display font-bold text-forest-800">Каталог мест</h1>
+          <p className="mt-3 text-lg text-forest-700/70 max-w-2xl">
+            Откройте для себя уникальные локации Краснодарского края. Просматривайте, лайкайте и планируйте!
+          </p>
         </div>
 
         {/* Filters Mock */}
         <div className="flex flex-wrap gap-3 mb-8">
-           {["Все", "Винодельни 🍷", "Природа 🏔️", "Фермы 🌾", "Рестораны 🍽️"].map(f => (
-             <button key={f} className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-semibold text-forest-700 hover:border-terracotta-500 hover:text-terracotta-600 transition-colors shadow-sm">
-               {f}
-             </button>
-           ))}
+          {["Все", "Винодельни 🍷", "Природа 🏔️", "Фермы 🌾", "Рестораны 🍽️"].map(f => (
+            <button key={f} className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-semibold text-forest-700 hover:border-terracotta-500 hover:text-terracotta-600 transition-colors shadow-sm">
+              {f}
+            </button>
+          ))}
         </div>
 
         {loading ? (
@@ -65,7 +65,7 @@ export default function CatalogPage() {
               <PlaceCard key={place.id || i} place={place} />
             ))}
             {places.length === 0 && (
-               <div className="col-span-full text-center text-gray-500 mt-10">Нет мест для отображения.</div>
+              <div className="col-span-full text-center text-gray-500 mt-10">Нет мест для отображения.</div>
             )}
           </div>
         )}
