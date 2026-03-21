@@ -192,7 +192,7 @@ async def _call_openai(system_prompt: str, user_prompt: str) -> dict:
                     {"role": "user", "content": user_prompt},
                 ],
                 "max_tokens": 800,
-                "temperature": 0.7,
+                "temperature": 0.5,
             },
         )
         response.raise_for_status()
