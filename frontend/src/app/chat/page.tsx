@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Send, User, Bot, Loader2 } from "lucide-react";
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<any[]>([{ role: "assistant", content: "Привет! Я Кубань — твой ИИ-помощник по Краснодарскому краю. Какой отдых ищешь?" }]);
+  const [messages, setMessages] = useState<any[]>([{ role: "assistant", content: "Привет! Я Кубаноид — твой ИИ-помощник по Краснодарскому краю. Какой отдых ищешь?" }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
