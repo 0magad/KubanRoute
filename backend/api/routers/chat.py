@@ -3,7 +3,7 @@ import asyncio
 import httpx
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
-from config import OLLAMA_BASE_URL, OLLAMA_MODEL, SYSTEM_PROMPT
+from config import OLLAMA_BASE_URL, OLLAMA_MODEL
 from core.services.db import supabase
 from core.services.user_service import get_user_profile
 from core.services.weather_service import get_weather
@@ -14,6 +14,24 @@ from core.models.schemas import CurrentUser, ChatMessage
 router = APIRouter()
 
 
+SYSTEM_PROMPT = (
+    "Ты — Кубаноид, дружелюбный ИИ-помощник по туризму в Краснодарском крае.\n"
+    "Учитывай контекст профиля пользователя, погоды и рекомендаций мест.\n"
+    "Профиль пользователя: {user_profile_context}\n"
+    "Погода: {weather_context}\n"
+    "Рекомендации мест: {places_context}\n"
+    "Отвечай по-русски, кратко и по делу."
+)
+
+
+def _build_system_prompt(profile: dict, weather: dict, places: list[dict]) -> str:
+    context_json = {
+        "user_profile_context": json.dumps(profile, ensure_ascii=False),
+        "weather_context": json.dumps(weather, ensure_ascii=False),
+        "places_context": json.dumps(places, ensure_ascii=False),
+    }
+    template = SYSTEM_PROMPT
+    
 
 EXTRACTION_PROMPT = """
 Извлеки из сообщения пользователя данные. Верни ТОЛЬКО JSON, без пояснений.
@@ -67,10 +85,11 @@ async def chat_endpoint(msg: ChatMessage, user: CurrentUser = Depends(get_curren
 
     # Normally fetch history and profile here
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT.format(
-            user_profile_context=profile,
-            weather_context=weather, 
-            places_context=recommendations.get("places", []))
+        {"role": "system", "content": _build_system_prompt(
+            profile=profile,
+            weather=weather,
+            places=recommendations.get("places", []),
+        )
             },
         {"role": "user", "content": msg.text}
     ]
