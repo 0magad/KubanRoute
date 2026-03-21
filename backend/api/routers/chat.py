@@ -3,10 +3,13 @@ import asyncio
 import httpx
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
-from schemas.chat_message import ChatMessage
 from config import OLLAMA_BASE_URL, OLLAMA_MODEL, SYSTEM_PROMPT
 from core.services.db import supabase
+from core.services.user_service import get_user_profile
+from core.services.weather_service import get_weather
+from core.services.recommendation_service import get_top_recommendations
 from core.auth import get_current_user
+from core.models.schemas import CurrentUser, ChatMessage
 
 router = APIRouter()
 
@@ -58,11 +61,17 @@ async def run_extraction(user_id: str, message: str):
 
 @router.post("/api/chat")
 async def chat_endpoint(msg: ChatMessage, user: CurrentUser = Depends(get_current_user)):
-    user_id = user.id
+    profile = await get_user_profile(user.id)
+    weather = await get_weather("Краснодарский край")
+    recommendations = await get_top_recommendations(user.id, limit=10)
 
     # Normally fetch history and profile here
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": SYSTEM_PROMPT.format(
+            user_profile_context=profile,
+            weather_context=weather, 
+            places_context=recommendations.get("places", []))
+            },
         {"role": "user", "content": msg.text}
     ]
 

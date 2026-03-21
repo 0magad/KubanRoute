@@ -3,7 +3,7 @@ GET /api/routes/{token} — Get a shared route by token.
 """
 
 from fastapi import APIRouter, HTTPException
-from services.route_generator import get_route_by_token
+from core.services.route_generator import get_route_by_token
 
 router = APIRouter()
 

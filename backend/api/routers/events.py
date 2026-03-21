@@ -2,7 +2,7 @@ import asyncio
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Any
-from services.db import supabase
+from core.services.db import supabase
 
 router = APIRouter()
 

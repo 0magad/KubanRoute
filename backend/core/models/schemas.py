@@ -116,3 +116,11 @@ class GeneratedRoute(BaseModel):
     meta: RouteMeta
     days: list[RouteDay]
     logistics: RouteLogistics
+
+
+class CurrentUser(BaseModel):
+    id: str
+    email: str | None = None
+
+class ChatMessage(BaseModel):
+    text: str
