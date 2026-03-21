@@ -43,8 +43,8 @@ async def generate_route(profile: UserProfile) -> GeneratedRoute:
 
     n_days = DAYS_MAP.get(profile.days, 3)
     
-    # 1. ML Recommendations
-    recs_data = await get_top_recommendations(user_id, limit=n_days * 6)
+    # 1. ML Recommendations (pass survey profile for personalized scoring)
+    recs_data = await get_top_recommendations(user_id, limit=n_days * 6, survey_profile=profile)
     places_dicts = recs_data.get("places", [])
     weather = recs_data.get("weather", {})
     justifications = recs_data.get("justifications", {})
