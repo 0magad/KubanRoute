@@ -95,6 +95,6 @@ async def chat_endpoint(msg: ChatMessage, user: CurrentUser = Depends(get_curren
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
             
         # Post-processing
-        asyncio.create_task(run_extraction(user_id, msg.text))
+        asyncio.create_task(run_extraction(user.id, msg.text))
 
     return StreamingResponse(stream(), media_type="text/event-stream")
