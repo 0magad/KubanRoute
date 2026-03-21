@@ -18,6 +18,18 @@ export default function Header() {
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <Link
+              href="/chat"
+              className="text-sm font-medium text-terracotta-600 hover:text-terracotta-700 transition-colors flex items-center gap-1"
+            >
+              ИИ-Ассистент 🪄
+            </Link>
+            <Link
+              href="/catalog"
+              className="text-sm font-bold text-forest-700 hover:text-terracotta-500 transition-colors"
+            >
+              Каталог мест
+            </Link>
+            <Link
               href="/#how-it-works"
               className="text-sm font-medium text-forest-700/70 hover:text-forest-700 transition-colors"
             >
@@ -29,18 +41,17 @@ export default function Header() {
             >
               Примеры маршрутов
             </Link>
-            <Link
-              href="/business"
-              className="text-sm font-medium text-forest-700/70 hover:text-forest-700 transition-colors"
-            >
-              Для бизнеса
-            </Link>
           </nav>
 
-          {/* CTA */}
-          <Link href="/survey" className="btn-primary text-sm py-2 px-5">
-            Построить маршрут
-          </Link>
+          {/* CTA & Auth */}
+          <div className="flex items-center gap-4">
+            <Link href="/auth/signin" className="text-sm font-bold text-forest-800 hover:text-terracotta-600 transition-colors">
+              Войти
+            </Link>
+            <Link href="/survey" className="btn-primary text-sm py-2 px-5 shadow-md">
+              Построить маршрут
+            </Link>
+          </div>
         </div>
       </div>
     </header>

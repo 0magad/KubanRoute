@@ -231,3 +231,26 @@ def _fallback_narrative(days_structure: list[dict]) -> dict:
         ),
         "days": days,
     }
+
+
+async def analyze_sentiment(text: str) -> tuple[float, list[str]]:
+    """Analyze review sentiment and extract keywords."""
+    system_prompt = (
+        "Ты — анализатор отзывов. Верни ТОЛЬКО валидный JSON с оценкой тональности от -1.0 (крайне негативно) "
+        "до 1.0 (крайне позитивно) и списком ключевых слов. Никаких других текстов.\n"
+        'Формат строго: {"sentiment_score": 0.85, "keywords": ["море", "вино", "отдых"]}'
+    )
+    user_prompt = f"Отзыв: {text}"
+    
+    try:
+        if LLM_PROVIDER == "openai" and OPENAI_API_KEY:
+            res = await _call_openai(system_prompt, user_prompt)
+        else:
+            res = await _call_ollama(system_prompt, user_prompt)
+            
+        score = float(res.get("sentiment_score", 0.0))
+        keywords = res.get("keywords", [])
+        return max(-1.0, min(1.0, score)), keywords
+    except Exception as e:
+        logger.error(f"Sentiment analysis failed: {e}")
+        return 0.0, []

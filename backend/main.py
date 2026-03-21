@@ -8,7 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from config import HOST, PORT
 
-from routers import generate, places, routes, business
+from routers import generate, places, routes, business, weather, events, reviews, chat, recommendations, pdf_export
 
 # Setup logging
 logging.basicConfig(
@@ -42,7 +42,12 @@ app.include_router(generate.router, tags=["Generate"])
 app.include_router(places.router, tags=["Places"])
 app.include_router(routes.router, tags=["Routes"])
 app.include_router(business.router, tags=["Business"])
-
+app.include_router(weather.router, tags=["Weather"])
+app.include_router(events.router, tags=["Events"])
+app.include_router(reviews.router, tags=["Reviews"])
+app.include_router(chat.router, tags=["Chat"])
+app.include_router(recommendations.router, tags=["Recommendations"])
+app.include_router(pdf_export.router, tags=["PDF Export"])
 
 @app.on_event("startup")
 async def startup_event():
