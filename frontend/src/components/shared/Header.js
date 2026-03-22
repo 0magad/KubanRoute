@@ -14,7 +14,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2 group">
             <span className="text-2xl">🌿</span>
             <span className="font-display text-xl font-bold text-forest-700 group-hover:text-terracotta-500 transition-colors">
-              KubanRoute
+              АвтоРитм
             </span>
           </Link>
 

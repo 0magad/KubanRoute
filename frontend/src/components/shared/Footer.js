@@ -10,7 +10,7 @@ export default function Footer() {
             <div className="flex items-center gap-2 mb-4">
               <span className="text-2xl">🌿</span>
               <span className="font-display text-xl font-bold text-white">
-                KubanRoute
+                АвтоРитм
               </span>
             </div>
             <p className="text-sm text-white/60 leading-relaxed">
@@ -46,10 +46,10 @@ export default function Footer() {
             <h4 className="font-semibold text-white mb-4">Контакты</h4>
             <ul className="space-y-2">
               <li className="text-sm text-white/60">
-                📧 hello@kubanroute.ru
+                📧 hello@avtoritm.ru
               </li>
               <li className="text-sm text-white/60">
-                📱 Telegram: @kubanroute
+                📱 Telegram: @avtoritm
               </li>
               <li className="text-sm text-white/60">
                 🏠 Краснодарский край, Россия
@@ -61,7 +61,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-8 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-white/40">
-            © 2025 KubanRoute. Все права защищены.
+            © 2025 АвтоРитм. Все права защищены.
           </p>
           <Link
             href="/business"

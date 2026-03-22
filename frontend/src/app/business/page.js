@@ -150,7 +150,7 @@ export default function BusinessPage() {
               Добавить своё место
             </h1>
             <p className="text-forest-600/70 text-lg">
-              Расскажите о вашем месте — и туристы найдут вас через KubanRoute
+              Расскажите о вашем месте — и туристы найдут вас через АвтоРитм
             </p>
           </motion.div>
 

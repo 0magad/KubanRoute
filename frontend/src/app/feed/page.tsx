@@ -1,7 +1,7 @@
 import RoutesFeed from '@/components/Feed/RoutesFeed';
 
 export const metadata = {
-  title: 'Лента маршрутов | KubanRoute',
+  title: 'Лента маршрутов | АвтоРитм',
   description: 'Подобрано специально для вас',
 };
 
