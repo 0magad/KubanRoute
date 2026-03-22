@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <script src={`https://api-maps.yandex.ru/2.1/?apikey=${process.env.NEXT_PUBLIC_MAP_API_KEY || ''}&lang=ru_RU`} type="text/javascript"></script>
+        <script src="https://api-maps.yandex.ru/2.1/?apikey=eb3ba581-2c13-4886-b485-6bb9e7284f67&lang=ru_RU&load=package.full" type="text/javascript"></script>
       </head>
       <body className="min-h-screen bg-cream-100 font-body antialiased">
         <Providers>{children}</Providers>
