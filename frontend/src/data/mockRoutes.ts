@@ -1,4 +1,4 @@
-import { PlaceType } from '@/types'; // Assuming types exist, or we can inline them
+// Mock route data for route examples
 
 export interface RoutePoint {
   id: string;
