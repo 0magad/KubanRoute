@@ -73,6 +73,77 @@ export const mockRoutes: RouteFeedItem[] = [
     ]
   },
   {
+    id: 'route-north-1',
+    title: 'Северный гастро-винный маршрут Кубани',
+    description: 'Путешествие по северным районам Кубани: фермерские хозяйства, локальные винодельни и степные пейзажи.',
+    distance: '150–200 км',
+    duration: '3–4 часа',
+    points: [
+      {
+        id: 'n1',
+        type: 'start',
+        name: 'Краснодар (Старт)',
+        coordinates: [45.035470, 38.975313],
+      },
+      {
+        id: 'n2',
+        type: 'waypoint',
+        name: 'Станица Динская',
+        coordinates: [45.218750, 39.226944],
+        photoUrl: '/images/routes/dinskaya.png',
+        shortDescription: 'Казачья станица с локальными фермерскими продуктами.'
+      },
+      {
+        id: 'n3',
+        type: 'waypoint',
+        name: 'Агроферма (район Кореновска)',
+        coordinates: [45.470278, 39.451667],
+        photoUrl: '/images/routes/farm.png',
+        shortDescription: 'Фермерские сыры, мясо и дегустации местной продукции.'
+      },
+      {
+        id: 'n4',
+        type: 'waypoint',
+        name: 'Локальная винодельня (Север Кубани)',
+        coordinates: [45.500000, 39.300000],
+        photoUrl: '/images/routes/north_winery.png',
+        shortDescription: 'Небольшие частные винодельни с авторскими сортами.'
+      },
+      {
+        id: 'n5',
+        type: 'end',
+        name: 'Тимашевск (Финиш)',
+        coordinates: [45.615556, 38.935278],
+      }
+    ],
+    optionalPoints: [
+      {
+        id: 'on1',
+        type: 'waypoint',
+        name: 'Подсолнуховые поля',
+        coordinates: [45.579662, 39.192435],
+        photoUrl: '/images/routes/sunflowers.png',
+        shortDescription: 'Сезонные фотолокации (лето)'
+      },
+      {
+        id: 'on2',
+        type: 'waypoint',
+        name: 'Река Кирпили',
+        coordinates: [45.396475, 39.316921],
+        photoUrl: '/images/routes/river.png',
+        shortDescription: 'Спокойная природная зона для отдыха'
+      },
+      {
+        id: 'on3',
+        type: 'waypoint',
+        name: 'Казачье подворье',
+        coordinates: [45.350000, 39.250000],
+        photoUrl: '/images/routes/kazachye.png',
+        shortDescription: 'Этнографический туризм'
+      }
+    ]
+  },
+  {
     id: 'route-2',
     title: 'Винный тур выходного дня',
     description: 'Идеальный маршрут для ценителей вина и живописных пейзажей в районе Новороссийска.',
