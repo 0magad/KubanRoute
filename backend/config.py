@@ -3,6 +3,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# KubanRoute library uses SUPABASE_KEY; app uses SUPABASE_SERVICE_KEY
+if os.getenv("SUPABASE_SERVICE_KEY") and not os.getenv("SUPABASE_KEY"):
+    os.environ["SUPABASE_KEY"] = os.environ["SUPABASE_SERVICE_KEY"]
+
 # Ollama settings
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3-vl:235b-cloud")

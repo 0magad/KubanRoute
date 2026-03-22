@@ -34,4 +34,4 @@ npm run dev
 
 ## 📄 Лицензия
 
-MIT
+MIT 
