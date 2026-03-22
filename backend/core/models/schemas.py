@@ -14,6 +14,13 @@ class PlaceType(str, Enum):
     festival = "festival"
     route = "route"
     restaurant = "restaurant"
+    park = "park"
+    resort = "resort"
+    entertainment = "entertainment"
+    zoo = "zoo"
+    museum = "museum"
+    modern = "modern"
+    history = "history"
 
 
 class PlaceStatus(str, Enum):
