@@ -1,17 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Header from "@/components/shared/Header";
 import PlaceCard from "@/components/PlaceCard";
 import SwipeTest from "@/components/SwipeTest";
+
+const CATEGORIES = [
+  { label: "Все", type: null, icon: "" },
+  { label: "Винодельни", type: "winery", icon: "🍷" },
+  { label: "Природа", type: "nature", icon: "🏔️" },
+  { label: "Парки", type: "park", icon: "🌳" },
+  { label: "Курорты", type: "resort", icon: "⛷️" },
+  { label: "Развлечения", type: "entertainment", icon: "🎢" },
+  { label: "Музеи", type: "museum", icon: "🏛️" },
+  { label: "Фермы", type: "farm", icon: "🌾" },
+  { label: "История", type: "history", icon: "📜" },
+  { label: "Фестивали", type: "festival", icon: "🎪" },
+];
 
 export default function CatalogPage() {
   const [places, setPlaces] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showSwipe, setShowSwipe] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check if user has done the swipe test before
     if (typeof window !== "undefined") {
       const swiped = localStorage.getItem("kubanroute_swiped");
       if (!swiped) {
@@ -23,7 +36,7 @@ export default function CatalogPage() {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/places`)
       .then(res => res.json())
       .then(data => {
-        setPlaces(data);
+        setPlaces(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch(err => {
@@ -31,6 +44,11 @@ export default function CatalogPage() {
         setLoading(false);
       });
   }, []);
+
+  const filteredPlaces = useMemo(() => {
+    if (!activeFilter) return places;
+    return places.filter((p: any) => p.type === activeFilter);
+  }, [places, activeFilter]);
 
   return (
     <div className="min-h-screen bg-cream-100 flex flex-col">
@@ -46,11 +64,19 @@ export default function CatalogPage() {
           </p>
         </div>
 
-        {/* Filters Mock */}
+        {/* Category Filters */}
         <div className="flex flex-wrap gap-3 mb-8">
-          {["Все", "Винодельни 🍷", "Природа 🏔️", "Фермы 🌾", "Рестораны 🍽️"].map(f => (
-            <button key={f} className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-semibold text-forest-700 hover:border-terracotta-500 hover:text-terracotta-600 transition-colors shadow-sm">
-              {f}
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat.label}
+              onClick={() => setActiveFilter(cat.type)}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all shadow-sm ${
+                activeFilter === cat.type
+                  ? "bg-terracotta-500 text-white border border-terracotta-500 shadow-md"
+                  : "bg-white border border-gray-200 text-forest-700 hover:border-terracotta-500 hover:text-terracotta-600"
+              }`}
+            >
+              {cat.icon} {cat.label}
             </button>
           ))}
         </div>
@@ -61,11 +87,13 @@ export default function CatalogPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {places.map((place: any, i: number) => (
+            {filteredPlaces.map((place: any, i: number) => (
               <PlaceCard key={place.id || i} place={place} />
             ))}
-            {places.length === 0 && (
-              <div className="col-span-full text-center text-gray-500 mt-10">Нет мест для отображения.</div>
+            {filteredPlaces.length === 0 && (
+              <div className="col-span-full text-center text-gray-500 mt-10">
+                Нет мест в этой категории.
+              </div>
             )}
           </div>
         )}
