@@ -50,6 +50,8 @@ export default function ChatPage() {
               if (data.token) {
                 botResponse += data.token;
                 setMessages([...newMsgs, { role: "assistant", content: botResponse }]);
+              } else if (data.error) {
+                setMessages([...newMsgs, { role: "assistant", content: `❌ Ошибка ИИ: ${data.error}` }]);
               }
             } catch (err) { }
           }

@@ -3,7 +3,8 @@ import asyncio
 import httpx
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
-from config import OLLAMA_BASE_URL, OLLAMA_MODEL
+import os
+from config import OLLAMA_BASE_URL, OLLAMA_MODEL, OPENAI_API_KEY
 from core.services.db import supabase
 from core.services.user_service import get_user_profile
 from core.services.weather_service import get_weather
@@ -98,18 +99,37 @@ async def chat_endpoint(msg: ChatMessage, user: CurrentUser = Depends(get_curren
         full = ""
         try:
             async with httpx.AsyncClient(timeout=120) as client:
-                async with client.stream("POST", f"{OLLAMA_BASE_URL}/api/chat", json={
-                    "model": OLLAMA_MODEL,
-                    "messages": messages,
-                    "stream": True
-                }) as resp:
-                    async for line in resp.aiter_lines():
-                        if line:
-                            chunk = json.loads(line)
-                            token = chunk.get("message", {}).get("content", "")
-                            if token:
-                                full += token
-                                yield f"data: {json.dumps({'token': token})}\n\n"
+                if OPENAI_API_KEY:
+                    # Using OpenAI Stream
+                    async with client.stream("POST", "https://api.openai.com/v1/chat/completions", headers={"Authorization": f"Bearer {OPENAI_API_KEY}"}, json={
+                        "model": "gpt-4o-mini",
+                        "messages": messages,
+                        "stream": True
+                    }) as resp:
+                        async for line in resp.aiter_lines():
+                            if line.startswith("data: "):
+                                data_str = line[6:]
+                                if data_str.strip() == "[DONE]":
+                                    break
+                                chunk = json.loads(data_str)
+                                token = chunk.get("choices", [{}])[0].get("delta", {}).get("content", "")
+                                if token:
+                                    full += token
+                                    yield f"data: {json.dumps({'token': token})}\n\n"
+                else:
+                    # Using local/cloud Ollama
+                    async with client.stream("POST", f"{OLLAMA_BASE_URL}/api/chat", json={
+                        "model": OLLAMA_MODEL,
+                        "messages": messages,
+                        "stream": True
+                    }) as resp:
+                        async for line in resp.aiter_lines():
+                            if line:
+                                chunk = json.loads(line)
+                                token = chunk.get("message", {}).get("content", "")
+                                if token:
+                                    full += token
+                                    yield f"data: {json.dumps({'token': token})}\n\n"
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
             

@@ -41,3 +41,16 @@ async def post_review(review: ReviewRequest):
         raise HTTPException(status_code=500, detail="Failed to save review")
         
     return {"status": "ok", "sentiment_score": sentiment_score}
+
+
+@router.get("/api/reviews/{place_id}")
+def get_reviews(place_id: str):
+    """Get all reviews for a specific place."""
+    if not supabase:
+        return []
+    try:
+        result = supabase.table('reviews').select('*').eq('place_id', place_id).order('created_at', desc=True).execute()
+        return result.data or []
+    except Exception as e:
+        print(f"Failed to fetch reviews: {e}")
+        return []

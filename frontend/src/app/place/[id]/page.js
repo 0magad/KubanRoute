@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { tracker } from '@/lib/tracker';
 import { getPlace } from '@/lib/api';
 import { PLACE_TYPES, TAG_LABELS, MONTHS } from '@/lib/constants';
 import Header from '@/components/shared/Header';
@@ -57,6 +58,10 @@ export default function PlacePage() {
   const params = useParams();
   const [place, setPlace] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [reviews, setReviews] = useState([]);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -92,6 +97,22 @@ export default function PlacePage() {
 
       setPlace(data);
       setIsLoading(false);
+
+      // Track page view
+      if (typeof window !== 'undefined') {
+        tracker.onCardOpen(params.id);
+      }
+
+      // Load reviews
+      try {
+        const reviewsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reviews/${params.id}`);
+        if (reviewsRes.ok) {
+          const reviewsData = await reviewsRes.json();
+          setReviews(reviewsData);
+        }
+      } catch (e) {
+        console.error('Failed to load reviews', e);
+      }
     }
     load();
   }, [params.id]);
@@ -232,13 +253,104 @@ export default function PlacePage() {
               </div>
             )}
 
+            {/* Reviews Section */}
+            <div className="mb-10">
+              <h3 className="font-display text-xl font-bold text-forest-800 mb-6">
+                💬 Отзывы ({reviews.length})
+              </h3>
+
+              {/* Submit Review Form */}
+              <div className="bg-cream-50 rounded-xl border border-cream-200 p-5 mb-6">
+                <h4 className="font-semibold text-forest-800 text-sm mb-3">Оставить отзыв</h4>
+                <div className="flex gap-1 mb-3">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setReviewRating(star)}
+                      className={`text-2xl transition-transform hover:scale-110 ${
+                        star <= reviewRating ? 'text-yellow-400' : 'text-gray-300'
+                      }`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                  <span className="ml-2 text-sm text-forest-600 self-center">{reviewRating}/5</span>
+                </div>
+                <textarea
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  placeholder="Поделитесь впечатлениями о месте..."
+                  className="w-full border border-cream-300 rounded-lg p-3 text-sm text-forest-800 focus:outline-none focus:ring-2 focus:ring-terracotta-500/50 resize-none h-24 bg-white"
+                />
+                <button
+                  disabled={submitting || !reviewText.trim()}
+                  onClick={async () => {
+                    setSubmitting(true);
+                    try {
+                      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reviews`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          place_id: place.id,
+                          rating: reviewRating,
+                          text: reviewText,
+                        }),
+                      });
+                      // Reload reviews
+                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reviews/${place.id}`);
+                      if (res.ok) setReviews(await res.json());
+                      setReviewText('');
+                      setReviewRating(5);
+                    } catch (e) {
+                      console.error('Review submit error', e);
+                    }
+                    setSubmitting(false);
+                  }}
+                  className="mt-3 px-6 py-2 bg-terracotta-500 text-white rounded-lg text-sm font-semibold hover:bg-terracotta-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submitting ? 'Отправка...' : 'Отправить отзыв'}
+                </button>
+              </div>
+
+              {/* Reviews List */}
+              {reviews.length === 0 ? (
+                <p className="text-forest-600/50 text-sm text-center py-6">Пока нет отзывов. Будьте первым!</p>
+              ) : (
+                <div className="space-y-4">
+                  {reviews.map((r, i) => (
+                    <div key={r.id || i} className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-forest-100 flex items-center justify-center text-forest-700 text-xs font-bold">
+                            {(r.user_id || 'U').charAt(0).toUpperCase()}
+                          </div>
+                          <span className="text-sm font-semibold text-forest-800">Путешественник</span>
+                        </div>
+                        <div className="flex gap-0.5">
+                          {[1, 2, 3, 4, 5].map((s) => (
+                            <span key={s} className={`text-sm ${s <= r.rating ? 'text-yellow-400' : 'text-gray-200'}`}>★</span>
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-sm text-forest-700/80 leading-relaxed">{r.text}</p>
+                      {r.created_at && (
+                        <p className="text-xs text-gray-400 mt-2">
+                          {new Date(r.created_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Back button */}
             <div className="flex items-center gap-4 pt-6 border-t border-cream-300">
               <button
                 onClick={() => window.history.back()}
                 className="btn-outline text-sm py-2 px-6"
               >
-                ← Назад к маршруту
+                ← Назад к каталогу
               </button>
               <Link href="/survey" className="btn-primary text-sm py-2 px-6">
                 Создать маршрут
