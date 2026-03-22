@@ -16,6 +16,18 @@ def weather_score(
 
     w = weather.to_dict() if hasattr(weather, "to_dict") else weather
     score = 0.5
+    
+    # Check if place is indoors
+    is_outdoor = place.get("outdoor", True) if isinstance(place, dict) else getattr(place, "outdoor", True)
+    w_sensitive = place.get("weather_sensitive", True) if isinstance(place, dict) else getattr(place, "weather_sensitive", True)
+    
+    temp = w.get("temperature")
+    precip = w.get("precipitation")
+    
+    if not is_outdoor or not w_sensitive:
+        if (precip is not None and precip > 5) or (temp is not None and (temp < 5 or temp > 35)):
+            return 0.95
+        return 0.80
 
     # Температура: комфортный диапазон 18–28 °C
     temp = w.get("temperature")
